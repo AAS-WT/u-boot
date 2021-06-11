@@ -45,7 +45,6 @@
  * This is an extended STM32F4 device
  */
 #define CONFIG_SYS_STM32
-#define CONFIG_SYS_STM32F43X
 
 /*
  * Enable GPIO driver
@@ -58,7 +57,7 @@
 #define CONFIG_DISPLAY_CPUINFO		1
 #define CONFIG_DISPLAY_BOARDINFO	1
 
-#define CONFIG_SYS_BOARD_REV_STR	"1.A"
+#define CONFIG_SYS_BOARD_REV_STR	"2.1"
 
 /*
  * Monitor prompt
@@ -102,8 +101,8 @@
 /*
  * Memory layout configuration
  */
-#define CONFIG_MEM_NVM_BASE		    0x00000000
-#define CONFIG_MEM_NVM_LEN		    (1024 * 1024 * 2)
+#define CONFIG_MEM_NVM_BASE		    0x08000000
+#define CONFIG_MEM_NVM_LEN		    (1024 * 512)
 #define CONFIG_ENVM			        1
 #if defined(CONFIG_ENVM)
 #define CONFIG_SYS_ENVM_BASE		0x08000000
@@ -152,8 +151,8 @@
  */
 #define CONFIG_ENV_IS_IN_ENVM
 #define CONFIG_ENV_SIZE			    (4 * 1024)
-#define CONFIG_ENV_ADDR 		    \
-	(CONFIG_SYS_ENVM_BASE + (128 * 1024))
+#define CONFIG_ENV_ADDR                    \
+       (CONFIG_SYS_ENVM_BASE + (128 * 1024))
 #define CONFIG_INFERNO			    1
 #define CONFIG_ENV_OVERWRITE		1
 
@@ -168,21 +167,6 @@
 #define CONFIG_STM32_USART_RX_IO_PIN	10	/* GPIO10 */
 #define CONFIG_BAUDRATE			        115200
 #define CONFIG_SYS_BAUDRATE_TABLE	    { 9600, 19200, 38400, 57600, 115200 }
-
-/*
- * Ethernet configuration
- */
-#define CONFIG_NET_MULTI
-#define CONFIG_STM32_ETH
-#define CONFIG_STM32_ETH_RMII
-/*
- * Ethernet RX buffers are malloced from the internal SRAM (more precisely,
- * from CONFIG_SYS_MALLOC_LEN part of it). Each RX buffer has size of 1536B.
- * So, keep this in mind when changing the value of the following config,
- * which determines the number of ethernet RX buffers (number of frames which
- * may be received without processing until overflow happens).
- */
-#define CONFIG_SYS_RX_ETH_BUFFER	    4
 
 /*
  * Console I/O buffer size
@@ -230,8 +214,8 @@
 #undef CONFIG_CMD_IMLS
 #undef CONFIG_CMD_LOADS
 #undef CONFIG_CMD_MISC
-#define CONFIG_CMD_NET
-#undef CONFIG_CMD_NFS
+// #define CONFIG_CMD_NET
+// #undef CONFIG_CMD_NFS
 #undef CONFIG_CMD_SOURCE
 #undef CONFIG_CMD_XIMG
 
@@ -265,8 +249,7 @@
 #define LOADADDR		                "0xD0007FB4"
 
 #define REV_EXTRA_ENV		            \
-	                                    "envmboot=run args addip;bootm ${envmaddr}\0"		\
-	                                    "update=tftp ${image};"					\
+										"envmboot=run args;bootm ${envmaddr}\0"               \
 		                                "cptf ${envmaddr} ${loadaddr} ${filesize}\0"
 
 #define CONFIG_SYS_CONSOLE_IS_IN_ENV
@@ -277,14 +260,8 @@
 #define CONFIG_EXTRA_ENV_SETTINGS				\
 	"loadaddr=" LOADADDR "\0"				\
 	"args=setenv bootargs " CONFIG_BOOTARGS "\0"		\
-	"addip=setenv bootargs ${bootargs} ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}:${hostname}:eth0:off\0"				\
-	"envmaddr=08040000\0"					\
-	"ethaddr=C0:B1:3C:88:88:85\0"				\
-	"ipaddr=172.17.4.206\0"					\
-	"serverip=172.17.0.1\0"					\
+	"envmaddr=08020000\0"					\
 	"image=stm32f407vet6/uImage\0"				\
-	"stdin=serial\0"					\
-	"netboot=tftp ${image};run args addip;bootm\0"		\
 	REV_EXTRA_ENV
 
 /*
